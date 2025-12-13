@@ -1,0 +1,72 @@
+spring:
+  application:
+    name: MQ-PoC
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    template:
+      mandatory: true
+    listener:
+      simple:
+        acknowledge-mode: manual
+        default-requeue-rejected: false
+        prefetch: 1
+
+messaging:
+  shared:
+    dlx: shared.dlx
+    dlq: shared.dlq
+  services:
+    serviceA:
+      prefix: serviceA
+      exchange: serviceA.events
+      queue: serviceA.main
+      schema-version: 1.0
+      source-service: serviceA
+    serviceB:
+      prefix: serviceB
+      exchange: serviceB.events
+      queue: serviceB.main
+      schema-version: 1.0
+      source-service: serviceB
+    serviceBToA:
+      prefix: serviceB
+      exchange: serviceB.events
+      queue: serviceA.fromServiceB
+      schema-version: 1.0
+      source-service: serviceB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+---
+spring:
+  config:
+    activate:
+      on-profile: both
+
+---
+spring:
+  config:
+    activate:
+      on-profile: service-a
+
+---
+spring:
+  config:
+    activate:
+      on-profile: service-b
+
+---
+spring:
+  config:
+    activate:
+      on-profile: cross

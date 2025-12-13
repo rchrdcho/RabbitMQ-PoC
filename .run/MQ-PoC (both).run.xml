@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="MQ-PoC (both)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="ACTIVE_PROFILES" value="both" />
+    <option name="MAIN_CLASS_NAME" value="com.example.mqpoc.MqPocApplication" />
+    <module name="MQ.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.mqpoc.MqPoCApplication" />
+    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

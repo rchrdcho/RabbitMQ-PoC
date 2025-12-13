@@ -1,0 +1,40 @@
+### Service A - custom payload
+POST http://localhost:8080/api/service-a/events
+Content-Type: application/json
+
+{
+  "eventType": "order.created",
+  "payload": {
+    "orderId": "ORD-123",
+    "customerId": "C-1",
+    "totalAmount": 12000,
+    "currency": "KRW",
+    "items": [
+      {
+        "sku": "SKU-1",
+        "qty": 1,
+        "price": 12000
+      }
+    ]
+  }
+}
+
+### Service A - sample trigger (HEAD, random payload)
+HEAD http://localhost:8080/api/service-a/events
+
+### Service B - custom payload
+POST http://localhost:8080/api/service-b/events
+Content-Type: application/json
+
+{
+  "eventType": "user.created",
+  "payload": {
+    "userId": "USER-1",
+    "email": "user1@example.com",
+    "name": "Sample User",
+    "status": "ACTIVE"
+  }
+}
+
+### Service B - sample trigger (HEAD, random payload)
+HEAD http://localhost:8080/api/service-b/events
