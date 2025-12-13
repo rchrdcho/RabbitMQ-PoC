@@ -140,3 +140,20 @@
   }
 }
 ```
+
+---
+
+## Interacting with the AI Agent
+
+This project includes an AI agent that acts as a **Technical Guide** to help developers learn RabbitMQ through this
+PoC (Proof of Concept). You can ask the agent questions about the project's code, architecture, and the RabbitMQ
+concepts implemented within it.
+
+The agent's primary role is to analyze the project's code and explain how things work. It can help you understand
+messaging patterns, MSA integration, and the specific implementation details of this PoC.
+
+### How to use AI Agent
+
+1. To interact with the AI agent, execute the following command from the project root directory.
+2. To make the agent read the `AGENTS.md` file as its first command, you can typically instruct it to do so after
+   invocation.
