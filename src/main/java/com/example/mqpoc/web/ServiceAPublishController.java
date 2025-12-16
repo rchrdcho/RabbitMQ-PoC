@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/service-a/events")
-@Profile({"service-a", "both"})
+@Profile({"service-a", "both", "cross"})
 public class ServiceAPublishController {
 
     private static final String DEFAULT_EVENT = "order.created";

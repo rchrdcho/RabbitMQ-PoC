@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/service-b/events")
-@Profile({"service-b", "both"})
+@Profile({"service-b", "both", "cross"})
 public class ServiceBPublishController {
 
     private static final String DEFAULT_EVENT = "user.created";
