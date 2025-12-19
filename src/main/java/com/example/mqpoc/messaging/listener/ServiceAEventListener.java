@@ -1,6 +1,8 @@
 package com.example.mqpoc.messaging.listener;
 
 import com.example.mqpoc.messaging.model.EventEnvelope;
+import com.example.mqpoc.messaging.model.payload.OrderCreatedEvent;
+import com.example.mqpoc.messaging.model.payload.UserCreatedEvent;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -25,11 +27,8 @@ public class ServiceAEventListener {
      * @param channel  수동 ACK/NACK 전송을 위한 채널
      * @throws IOException ACK/NACK 전송 실패 시
      */
-    @RabbitListener(queues = {
-            "${messaging.services.serviceA.queue}",
-            "${messaging.services.serviceBToA.queue}"
-    })
-    public void onMessage(@Payload EventEnvelope<?> envelope, Message message, Channel channel) throws IOException {
+    @RabbitListener(queues = {"${messaging.services.serviceA.queue}"})
+    public void handleOrderCreatedEvent(@Payload EventEnvelope<OrderCreatedEvent> envelope, Message message, Channel channel) throws IOException {
         long deliveryTag = message.getMessageProperties().getDeliveryTag();
         try {
             System.out.printf("ServiceA consume: routingKey=%s eventType=%s messageId=%s traceId=%s%n",
@@ -37,6 +36,25 @@ public class ServiceAEventListener {
                     envelope.getEventType(),
                     envelope.getMetadata() != null ? envelope.getMetadata().getMessageId() : "n/a",
                     envelope.getMetadata() != null ? envelope.getMetadata().getTraceId() : "n/a");
+            System.out.println(envelope.getPayload().toString());
+            channel.basicAck(deliveryTag, false);
+        } catch (Exception ex) {
+            System.err.printf("ServiceA handler error: %s%n", ex.getMessage());
+            channel.basicNack(deliveryTag, false, false);
+        }
+    }
+
+    @Profile("cross")
+    @RabbitListener(queues = {"${messaging.services.serviceBToA.queue}"})
+    public void handleUserCreatedEvent(@Payload EventEnvelope<UserCreatedEvent> envelope, Message message, Channel channel) throws IOException {
+        long deliveryTag = message.getMessageProperties().getDeliveryTag();
+        try {
+            System.out.printf("ServiceA consume: routingKey=%s eventType=%s messageId=%s traceId=%s%n",
+                    message.getMessageProperties().getReceivedRoutingKey(),
+                    envelope.getEventType(),
+                    envelope.getMetadata() != null ? envelope.getMetadata().getMessageId() : "n/a",
+                    envelope.getMetadata() != null ? envelope.getMetadata().getTraceId() : "n/a");
+            System.out.println(envelope.getPayload().toString());
             channel.basicAck(deliveryTag, false);
         } catch (Exception ex) {
             System.err.printf("ServiceA handler error: %s%n", ex.getMessage());

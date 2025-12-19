@@ -57,4 +57,15 @@ public class OrderCreatedEvent {
     public void setItems(List<OrderItem> items) {
         this.items = items;
     }
+
+    @Override
+    public String toString() {
+        return "OrderCreatedEvent{" +
+                "orderId='" + orderId + '\'' +
+                ", customerId='" + customerId + '\'' +
+                ", totalAmount=" + totalAmount +
+                ", currency='" + currency + '\'' +
+                ", items=" + items +
+                '}';
+    }
 }
