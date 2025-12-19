@@ -1,6 +1,6 @@
 # Evented MSA with RabbitMQ (PoC)
 
-[한국어로 보기](README_KR.md)
+[한국어로 보기](docs/README_KR.md)
 
 ## Exchange and queue strategies
 

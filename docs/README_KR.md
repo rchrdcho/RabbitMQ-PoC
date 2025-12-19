@@ -9,12 +9,12 @@
 - 장점: 서비스 단위 격리가 강하며(정책/권한 분리), 이름이 예측 가능하고, 서비스 제거가 쉽습니다. 오작동 시 영향 범위가 줄어듭니다.
 - 단점: 관리해야 할 exchange/binding이 늘어나며, 교차 서비스 라우팅 시 추가 binding 또는 퍼블리셔가 여러 exchange를 알아야 합니다.
 
-### 2. 중앙 공유 Exchange + 네임스페이스 라우팅 키
+### 2. 중앙 공유 Exchange + 네임스페이스 routing key
 
-- 무엇: 모든 서비스가 하나의 exchange(예: app.events)를 사용하고, 라우팅 키를 네임스페이스(serviceA.*, serviceB.*)로 구분합니다. 소비자는 자신의 네임스페이스 패턴으로 공유
+- 무엇: 모든 서비스가 하나의 exchange(예: app.events)를 사용하고, routing key를 네임스페이스(serviceA.*, serviceB.*)로 구분합니다. 소비자는 자신의 네임스페이스 패턴으로 공유
   exchange에 바인딩합니다.
 - 장점: 운영이 가장 단순(하나의 exchange)하며 소비자를 추가하기 쉽고 broker 객체가 최소화됩니다.
-- 단점: 격리가 약해 서비스별 정책/권한, DLX/TTL 튜닝이 어려워집니다. 규칙이 흐트러지면 라우팅 키 충돌과 소음이 생길 수 있습니다.
+- 단점: 격리가 약해 서비스별 정책/권한, DLX/TTL 튜닝이 어려워집니다. 규칙이 흐트러지면 routing key 충돌과 소음이 생길 수 있습니다.
 
 ### 3. 서비스별 Exchange + Exchange 간(“브리지”) 바인딩
 
@@ -46,7 +46,7 @@
   리플레이/모니터링이 가능합니다.
 - 비용: 추가 테이블 저장/유지보수(파티셔닝/TTL), 폴링/CDC로 인한 지연, 폴링으로 인한 DB 부하, CDC/배치/정리 등 운영 오버헤드가 있습니다. 릴레이(outbox→broker)와 소비자 모두에서 멱등
   처리가 필요합니다.
-- RabbitMQ 연동: 라우팅 키, 헤더, payload를 outbox에 함께 저장해 릴레이가 실제 전송 형태로 내보내도록 합니다. 릴레이 실패의 백오프/재시도 정책을 정의하고, DLQ와 outbox 상태를 함께
+- RabbitMQ 연동: routing key, header, payload를 outbox에 함께 저장해 릴레이가 실제 전송 형태로 내보내도록 합니다. 릴레이 실패의 백오프/재시도 정책을 정의하고, DLQ와 outbox 상태를 함께
   관리해 “sent/consumed” 가시성을 만듭니다. 시스템이 단순하고 지연에 민감하다면, outbox를 도입하기 전에 직접 발행 + `messageId` 로깅/메트릭부터 시작하는 것도 충분할 수 있습니다.
 - 의사결정 포인트:
     - 폴링/CDC로 인한 추가 지연이 허용되는가?
@@ -75,7 +75,7 @@
       `curl -I http://localhost:8080/api/service-b/events`
 - IDE HTTP 클라이언트: `requests.http`에 Service A/B용 POST/HEAD 요청이 준비돼 있습니다.
 
-### 메시지 헤더 예시
+### 메시지 header 예시
 
 ```json
 {
@@ -94,7 +94,7 @@
 }
 ```
 
-### 메시지 바디 예시
+### 메시지 body 예시
 
 ```json
 {
